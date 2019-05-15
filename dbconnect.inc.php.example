@@ -1,0 +1,11 @@
+<?php
+
+$db['server'] = 'localhost';
+$db['username'] = '';
+$db['password'] = '';
+$db['database'] = 'scenariobrowser';
+$db['prefix'] = 'scn_';
+
+$db['link'] = mysqli_connect($db['server'], $db['username'], $db['password'], $db['database']);
+
+?>

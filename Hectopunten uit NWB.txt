@@ -1,0 +1,58 @@
+Downloaden shapefile: http://geodata.nationaalgeoregister.nl/nwbwegen/atom/nwbwegen_hectopunten.xml
+Benodigd: QGIS
+
+QGIS
+----
+Kaartlagen > Laag toevoegen > Vectolaag toevoegen...
+Blader naar SHP file voor Wegvakken en open deze, herhaal voor SHP file voor hectopunten
+
+Aan linkerkant in lagendeelvenster, rechtsklik op Hectopunten en kies Eigenschappen
+Ga naar Koppelingen, voeg een nieuwe toe:
+    Koppellaag: Wegvakken
+    Koppelveld: WVK_ID
+    Doelveld: WVK_ID
+    
+Exporteren naar CSV:
+Rechtsklik op laag Hectopunten, Opslaan als...
+    Formaat: CSV
+    [Bladeren]
+    CRS: Wijzigen... kies voor WGS84
+    Overige instellingen kunnen blijven
+
+CSV
+---
+Belangrijkste velden:
+X en Y:                 coordinaten volgens WGS84
+HECTOMTRNG:             hectometerpunt in km*10
+Wegvakken_WEGNUMMER:    wegnummer van de weg
+Wegvakken_HECTO_LTTR:   toegevoegde letter van hectometerpunt, voor afslagen, parallelbanen, verbindingsbogen etc.
+Wegvakken_RPE_CODE:     administratieve rijrichting: L/R indien beschikbaar, anders windrichting
+Wegvakken_BST_CODE:     baansubsoort, zie onder
+Wegvakken_POS_TV_WOL:   positie van wegvak tov wegorientatielijn: Links, Rechts of Midden
+
+
+Baansubsoorten
+--------------
+•	VWG  	(Ventweg)
+•	PAR	    (Parallelweg - niet ventweg)
+•	MRB	    (Minirotondebaan)
+•	NRB	    (Normale rotondebaan - niet minirotondebaan)
+•	OPR	    (Toerit - synoniem: oprit)
+•	AFR		(Afrit)
+•	PST   	(Puntstuk =  snijpunt verharding)
+•	VBD	    (Verbindingsweg direct)
+•	VBI		(Verbindingsweg indirect)
+•	VBS		(Verbindingsweg semi-direct)
+•	VBR	    (Verbindingsweg rangeerbaan)
+•	VBK	    (Verbindingsweg kortsluitend)
+•	VBW	    (Verbindingsweg - overig)
+•	DST		(Doorsteek)
+•	PKP		(Verzorgingsbaan van/naar parkeerplaats)
+•	PKB 	(verzorgingsbaan van/naar parkeerplaats bij benzinestation)
+•	BST		(Verzorgingsbaan van /naar benzinestation)
+•	YYY	    (Overige baan)
+•	BU		(Busbaan)
+•	FP		(Fietspad)
+•	HR 		(Hoofdrijbaan)
+•	TN		(Tussenbaan)
+•	VP		(Voetpad)

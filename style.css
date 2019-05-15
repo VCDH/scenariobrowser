@@ -1,0 +1,463 @@
+/*
+ 	scenariobrowser - viewer en editor voor verkeersmanagementscenario's
+    Copyright (C) 2016-2019 Gemeente Den Haag, Netherlands
+    Developed by Jasper Vries
+ 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ 
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+ 
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+html, body {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: small;
+	color: #333;
+	background: #7cc4ee;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+div#navigation {
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+div#content {
+	display: block;
+	text-align: left;
+	margin: auto;
+	width: 900px;
+	padding: 48px 24px;
+	background: #FFF;
+}
+h1 {
+	color: #0b4285;
+	font-size: large;	
+}
+h2 {
+	color: #0b4285;
+	font-size: medium;	
+}
+p, ol {
+	max-width: 900px;	
+}
+a {
+	color: #3989c3;
+	text-decoration: underline;
+	cursor: pointer;
+}
+a:hover {
+	color: #9ac61e;
+}
+table {
+	text-align: left;
+	border-collapse: collapse;	
+	font-size: small;
+	background-color: #FFF;
+	margin: 4px 0;
+}
+th {
+	font-weight: bold;
+	border: 1px solid #999;
+	border-width: 0 0 3px 0;
+	text-align: left;
+	padding: 1px 4px;
+}
+td {
+	border: 1px solid #CCC;	
+	padding: 1px 4px;
+}
+tr.bold td {
+	font-weight: bold;
+}
+table.noborder td {
+	border: none;
+}
+table.noborder td:first-child {
+	padding-left: 0;
+}
+td.highlight {
+	background-color: #FF3;
+}
+
+legend {
+	font-weight: bold;
+}
+blockquote {
+	margin-left: 40px;
+	padding-left: 0;	
+}
+
+select {
+	float: left;
+	min-width: 300px;	
+}
+input[type=text], input[type=number] {
+	width: 294px;
+}
+input[type=password] {
+	width: 144px;
+}
+input[type=text], input[type=number], input[type=password], select {
+	background-color: #EEE;
+	border: solid #666;
+	border-width: 0 1px 1px 1px;
+	border-radius: 0 0 4px 4px;
+	padding: 2px;
+}
+input[type=submit], input[type=button] {
+	min-width: 160px;
+}
+input#searchbox {
+	width: 200px;
+	border: none;
+}
+textarea[name=comment] {
+	width: 300px;
+	height: 46px;	
+}
+textarea[name=defaulttexttext] {
+	width: 500px;
+	height: 80px;	
+}
+textarea#omschrijving { /*scenario*/
+	width: 900px;
+	height: 200px;
+}
+fieldset {
+	border: 1px solid #999;
+	border-radius: 5px;
+	margin: 8px 0;
+}
+label.disabled {
+	color: #999;
+}
+
+div.newpage {
+	clear: both;
+	background-color: #7cc4ee;
+	height: 20px;
+	margin: 16px -24px;	
+	page-break-after: always;
+}
+
+ul.toolbartab {
+    margin-top: -6px;
+    margin-left: -20px;
+}
+
+ul.toolbartab li {
+    display: block;
+	float: left;
+}
+ul.toolbartab li a, ul.toolbartab li span {
+    display: block;
+    border: 1px solid #CCC;
+	border-radius: 4px;
+	background-color: #FFF;
+	margin: 2px;
+	padding: 4px;	
+	height: 16px;
+	cursor: pointer;
+}
+
+ul.toolbartab li span.searchbox {
+	padding-left: 0;
+	padding-right: 0;
+}
+ul.toolbartab li span.searchbox input {
+	margin-top: -1px;
+}
+ul.toolbartab li#scnactive img {
+	vertical-align: middle;
+}
+ul.toolbartab li.button {
+	border-color: #333;
+	background: linear-gradient(to bottom, #CCC, #999);
+	cursor: pointer;	
+}
+ul.toolbartab li.button:hover {
+	border-color: #666;
+	background: linear-gradient(to bottom, #FFF, #CCC);
+}
+
+ul.scenariolijst, ul.wegvakkenlijst, ul#drips, ul.drips {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;	
+}
+ul.scenariolijst li, ul.wegvakkenlijst li, ul#bijlagen li {
+	margin: 4px 0;
+}
+
+ul#drips li, ul.drips li {
+	display: block;
+	margin: 8px;
+	float: left;
+}
+ul#drips li span.delete, ul#drips li span.name, #dialog tr, #button_refresh_drips, fieldset div.drip_image  {
+	cursor: pointer;
+}
+div.drip_image {
+	border: 2px solid #333;
+}
+div.drip_image img {
+	display: block;
+}
+#dialog tr:hover {
+	background-color: #9ac61e;
+}
+
+img.te { /*type en ernst van scenario plaatjes */
+	vertical-align: bottom;
+	margin-right: 2px;
+}
+
+.error {
+	padding: 16px;
+	border: 1px solid #900;
+	background-color: #FCC;
+	border-radius: 5px;	
+}
+.warning {
+	padding: 16px;
+	border: 1px solid #FC0;
+	background-color: #FF9;
+	border-radius: 5px;	
+}
+
+span.wegnummer_A {
+	display: inline-block;
+	border: 1px solid #FFF;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px #F00, 0 0 0 1em #F00 inset;
+	background-color: #F00;
+	padding: 0 2px;
+	margin: 1px 0;
+	font-weight: bold;
+	color: rgba(0,0,0,0);
+	text-shadow: 0 0 0 #FFF;
+}
+span.wegnummer_N {
+	display: inline-block;
+	border: 1px solid #000;
+	border-radius: 2px;
+	box-shadow: 0px 0px 0px 1px #FF0, 0 0 0 1em #FF0 inset;
+	background-color: #FF0;
+	padding: 0 2px;
+	margin: 1px 0;
+	font-weight: bold;
+	color: #000;
+}
+span.wegnummer_S {
+	display: inline-block;
+	border: 1px solid #000;
+	border-radius: 50%/5px;
+	box-shadow: 0px 0px 0px 1px #FFF;
+	background-color: #FFF;
+	padding: 0 2px;
+	margin: 1px 0;
+	font-weight: bold;
+	color: #000;
+	font-variant: small-caps;
+}
+
+/*organisaties*/
+div.org {
+	padding: 0 1px;
+	font-weight: bold;
+	font-size: x-small;
+	border: 2px solid;
+	border-bottom: none;
+	text-align: center;
+}
+div.org-GDH {
+	color: #000;
+	border-color: #155429;
+	background-color: #fff;
+}
+div.org-RWS {
+	color: #000;
+	border-color: #000;
+	background-color: #c9f;
+}
+div.org-GRD {
+	color: #000;
+	border-color: #000;
+	background-color: #9AC61E;
+}
+div.org-GZM {
+	color: #000;
+	border-color: #0072b9;
+	background-color: #ffe00f;
+}
+div.org-PZH {
+	color: #fff;
+	border-color: #000;
+	background-color: #c00;
+}
+div.org-other {
+	color: #000;
+	border-color: #000;
+	background-color: #666;
+}
+
+/*map related*/
+div.gm-style-iw {
+	font-size: small;
+	font-family: Verdana, Helvetica, sans-serif;
+}
+div.gm-style-iw table {
+	margin-left:auto; 
+	margin-right:auto;
+}
+div.gm-style-iw table td {
+	vertical-align: top;
+}
+div.gm-style-iw ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.markerlabel {
+	font-size: x-small;
+	color: #333;
+	width: 80px;
+	text-align: left;
+	white-space: nowrap;
+	font-weight: bold;
+}
+.dripmaplabel {
+	text-shadow:
+		2px 2px 2px #fff,
+		-2px -2px 2px #fff,  
+		2px -2px 2px #fff,
+		-2px 2px 2px #fff;
+	font-weight: bold;
+	font-size: small;
+	color: #000;
+	width: auto;
+	text-align: left;
+	white-space: nowrap;
+}
+.dripmaplabelleft {
+	text-shadow:
+		2px 2px 2px #fff,
+		-2px -2px 2px #fff,  
+		2px -2px 2px #fff,
+		-2px 2px 2px #fff;
+	font-weight: bold;
+	font-size: small;
+	color: #000;
+	width: 200px;
+	text-align: right;
+	white-space: nowrap;
+}
+.dripmaplabelcenter {
+	text-shadow:
+		2px 2px 2px #fff,
+		-2px -2px 2px #fff,  
+		2px -2px 2px #fff,
+		-2px 2px 2px #fff;
+	font-weight: bold;
+	font-size: small;
+	color: #000;
+	width: 200px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+/*jquery ui*/
+span.ui-icon {
+	display: inline-block;
+	vertical-align: bottom;	
+}
+
+ul.scenariolijst .ui-accordion-content {
+	padding: 0 4px 0 16px;
+}
+ul.scenariolijst .ui-accordion-header {
+	font-weight: bold;
+}
+ul.scenariolijst li.scn {
+	display: block;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	padding: 4px;
+	cursor: pointer;
+}
+ul.scenariolijst li.selected, ul.toolbartab li span.selected {
+	background-color: #9ac61e;
+}
+.ui-widget {
+    font-size: small;
+}
+#dialog {
+	text-align: left;
+}
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .4em;
+    margin: .8em 0 .2em;
+    line-height: 1.5;
+}
+.ui-autocomplete {
+	max-height: 90%;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+ul.ui-autocomplete li.notfound {
+	color: #C00;
+}
+.ui-icon-attachment {
+	background-image: url("images/attachment.png");
+}
+
+/*jquery fileupload*/
+.fileinput-button {
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	border: 1px solid #333;
+	border-radius: 4px;
+	padding: 4px;
+	background: linear-gradient(to bottom, #EEE, #CCC);
+	cursor: pointer;
+}
+.fileinput-button input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	opacity: 0;
+	-ms-filter: 'alpha(opacity=0)';
+	font-size: 200px !important;
+	direction: ltr;
+	cursor: pointer;
+}
+
+/* specifiek voor afdrukken */
+@media print {
+	.noprint {
+		display: none;
+	}
+	div#content {
+		padding: 0;
+	}
+	a {
+		color: #000;
+		text-decoration: none;
+	}
+	div.gm-style-cc {
+		display: none !important;
+	}
+}

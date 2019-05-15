@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase "/misc/scenariobrowser/opendata/"
+RewriteRule "scenario/(.*)$" "scenario.php?id=$1"
+RewriteRule "scenario$" "list.php"

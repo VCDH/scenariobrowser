@@ -1,0 +1,6 @@
+mail.cfg.php$
+dbconnect.inc.php$
+hectopunten.csv$
+^store/
+^attachments/
+.patch$
