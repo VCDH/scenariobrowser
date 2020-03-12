@@ -1,7 +1,7 @@
 <?php 
 /*
  	scenariobrowser - viewer en editor voor verkeersmanagementscenario's
-    Copyright (C) 2016-2019 Gemeente Den Haag, Netherlands
+    Copyright (C) 2016-2020 Gemeente Den Haag, Netherlands
     Developed by Jasper Vries
  
     This program is free software: you can redistribute it and/or modify
@@ -1316,7 +1316,7 @@ else {
 					echo '<h1>Inhoudsopgave</h1>';
 					echo '<ul>';
 					while ($row2 = mysqli_fetch_row($res)) {
-						echo '<li><a href="#'.$row2[0].'">'.htmlspecialchars($row[1]).(!empty($row2[1]) ? ' - '.htmlspecialchars($row2[1]) : '').'</a></li>';
+						echo '<li><a href="#'.$row2[0].'">'.(empty($row2[1]) ? htmlspecialchars($row[1]) : htmlspecialchars($row2[1])).'</a></li>';
 					}
 					echo '</ul>';
 				}
@@ -1336,7 +1336,7 @@ else {
 							echo ' | <a href="schakeling.php?id='.$row2[0].'&amp;do=delete"><span class="ui-icon ui-icon-trash"></span> schakeling verwijderen</a>';
 							echo '</div>';
 						}
-						echo '<a name="'.$row2[0].'"></a><h1>'.htmlspecialchars($row[1]).(!empty($row2[1]) ? ' - '.htmlspecialchars($row2[1]) : '').'</h1>';
+						echo '<a name="'.$row2[0].'"></a><h1>'.(empty($row2[1]) ? htmlspecialchars($row[1]) : htmlspecialchars($row2[1])).'</h1>';
 						//kaart
 						echo '<div id="map_'.$row[0].'_'.$row2[0].'" class="map-canvas" style="width: 900px; height: 500px;"></div>';
 						//drips
