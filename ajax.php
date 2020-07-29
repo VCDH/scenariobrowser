@@ -1,7 +1,7 @@
 <?php 
 /*
  	scenariobrowser - viewer en editor voor verkeersmanagementscenario's
-    Copyright (C) 2016-2019 Gemeente Den Haag, Netherlands
+    Copyright (C) 2016-2020 Gemeente Den Haag, Netherlands
     Developed by Jasper Vries
  
     This program is free software: you can redistribute it and/or modify
@@ -79,27 +79,55 @@ if ($_GET['type'] == 'infowindow') {
 			echo '</td></tr>';
 		}
 		//get scenarios by segment
-		$qry = "SELECT `".$db['prefix']."scenarios`.`id`, `".$db['prefix']."scenarios`.`naam`, `".$db['prefix']."scenarios`.`type`, `".$db['prefix']."scenarios`.`ernst` FROM `".$db['prefix']."wegvakmapping`
+		$qry = "SELECT `".$db['prefix']."scenarios`.`id`, `".$db['prefix']."scenarios`.`naam`, `".$db['prefix']."scenarios`.`type`, `".$db['prefix']."scenarios`.`ernst`, `".$db['prefix']."scenarios`.`archief` FROM `".$db['prefix']."wegvakmapping`
 		LEFT JOIN `".$db['prefix']."scenarios`
 		ON `".$db['prefix']."wegvakmapping`.`scenario_id` = `".$db['prefix']."scenarios`.`id`
-		WHERE `wegvak_id` = '".$data['id']."'
-		AND `".$db['prefix']."scenarios`.`archief` = 0 ";
+		WHERE `wegvak_id` = '".$data['id']."'";
 		if ($_GET['all'] == 'false') $qry .= " AND `".$db['prefix']."scenarios`.`type` != 'w' AND `".$db['prefix']."scenarios`.`type` != 'e'";
 		$qry .= " ORDER BY `".$db['prefix']."scenarios`.`naam`";
 		$res = mysqli_query($db['link'], $qry);
-		echo '<tr><td>scenario\'s:</td><td>';
+		$lijst_scenario = array();
+		$lijst_archief = array();
 		if (mysqli_num_rows($res)) {
-			include('scenariotype.cfg.php');
-			echo '<ul>';
+			include('scenariotype.cfg.php');	
 			while ($row = mysqli_fetch_row($res)) {
-				echo '<li><a href="scenario.php?id='.$row[0].'"><img src="images/'.$scenario_types_afbeeldingen[$row[2]].'" class="te" width="16" height="16" alt="'.$scenario_types[$row[2]].'" title="'.$scenario_types[$row[2]].'"><img src="images/'.$scenario_ernsten_afbeeldingen[$row[3]].'" class="te" width="16" height="16" alt="'.$scenario_ernsten[$row[3]].'" title="'.$scenario_ernsten[$row[3]].'">'.htmlspecialchars($row[1]).'</a></li>';
+				$li = '<a href="scenario.php?id='.$row[0].'"><img src="images/'.$scenario_types_afbeeldingen[$row[2]].'" class="te" width="16" height="16" alt="'.$scenario_types[$row[2]].'" title="'.$scenario_types[$row[2]].'"><img src="images/'.$scenario_ernsten_afbeeldingen[$row[3]].'" class="te" width="16" height="16" alt="'.$scenario_ernsten[$row[3]].'" title="'.$scenario_ernsten[$row[3]].'">'.htmlspecialchars($row[1]).'</a>';
+				if ($row[4] == 1) {
+					$lijst_archief[] = $li;
+				}
+				else {
+					$lijst_scenario[] = $li;
+				}
+			}
+		}
+
+		//scenariolijst
+		echo '<tr><td>scenario\'s:</td><td>';
+		if (!empty($lijst_scenario)) {
+			echo '<ul>';
+			foreach ($lijst_scenario as $li) {
+				echo '<li>';
+				echo $li;
+				echo '</li>';
 			}
 			echo '</ul>';
 		}
 		else {
-			echo '(geen)';	
+			echo '(geen)';
 		}
+		//lijst gearchiveerde scenario's
 		echo '</td></tr>';
+		if (!empty($lijst_archief)) {
+			echo '<tr><td>archief:</td><td>';
+			echo '<ul>';
+			foreach ($lijst_archief as $li) {
+				echo '<li><s>';
+				echo $li;
+				echo '</s></li>';
+			}
+			echo '</ul>';
+			echo '</td></tr>';
+		}
 		echo '<table>';
 		if (permissioncheck('wegvak_bewerken')) {
 			echo '<p><a href="wegvak.php?do=edit&amp;id='.$data['id'].'"><span class="ui-icon ui-icon-pencil"></span> routedeel bewerken</a> | <a href="wegvak.php?do=split&amp;id='.$data['id'].'"><span class="ui-icon ui-icon-scissors"></span> routedeel splitsen</a></p>';
