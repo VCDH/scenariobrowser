@@ -766,7 +766,7 @@ elseif ($_GET['do'] == 'download') {
 <head>
 <meta charset="UTF-8">
 <title>Scenariobrowser - Scenario</title>
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=api-key&amp;sensor=false"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=&amp;sensor=false"></script>
 <script type="text/javascript" src="markerwithlabel_packed.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
