@@ -38,6 +38,12 @@ div#content {
 	padding: 48px 24px;
 	background: #FFF;
 }
+.floatleft {
+	float: left;
+}
+.floatright {
+	float: right;
+}
 h1 {
 	color: #0b4285;
 	font-size: large;	
@@ -202,6 +208,22 @@ ul#drips li, ul.drips li {
 	display: block;
 	margin: 8px;
 	float: left;
+}
+div.drips {
+	display: block;
+	margin: 0 8px;
+}
+tr.drip_identical td {
+	background-color:#DFD;
+}
+tr.drip_added td {
+	background-color: #DDF;
+}
+tr.drip_removed td {
+	background-color: #FFD;
+}
+tr.drip_different td {
+	background-color:#FDD;
 }
 ul#drips li span.delete, ul#drips li span.name, #dialog tr, #button_refresh_drips, fieldset div.drip_image  {
 	cursor: pointer;
@@ -439,7 +461,6 @@ ul.ui-autocomplete li.notfound {
 	right: 0;
 	margin: 0;
 	opacity: 0;
-	-ms-filter: 'alpha(opacity=0)';
 	font-size: 200px !important;
 	direction: ltr;
 	cursor: pointer;

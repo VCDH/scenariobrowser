@@ -1220,7 +1220,14 @@ else {
 						echo '<p class="noprint" style="clear:right; float:right;"><a href="?id='.$row[0].'&amp;do=newconcept"><span class="ui-icon ui-icon-pencil"></span> nieuw concept maken</a></p>';
 					}
 					
+					
 					echo $table;
+
+					if (logincheck() && ($versie >= 2)) {
+						echo '<p class="noprint" style="clear:right; float:right;"><a href="scenariovergelijken.php?id='.$row[0].'&amp;versie1='.($versie-1).'&versie2='.$versie.'"><span class="ui-icon ui-icon-transferthick-e-w"></span> laatste versies vergelijken</a></p>';
+
+					}
+
 					echo '<div style="clear:both;"></div>';
 				}
 				
