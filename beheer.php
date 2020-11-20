@@ -140,7 +140,7 @@ elseif (permissioncheck('dripdb_bijwerken') && ($_GET['do'] == 'dripimport')) {
 					`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
 					`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
 					`owner` = '".mysqli_real_escape_string($db['link'], $data['aansturing'])."'";
-					if ((!empty($data['standaardtekst'])) || (!empty($data['bewegwijzering']))) {
+					if (!empty($data['standaardtekst'])) {
 						$qry .= ", `defaulttext` = '1'";
 					}
 					mysqli_query($db['link'], $qry);
@@ -186,8 +186,11 @@ elseif (permissioncheck('dripdb_bijwerken') && ($_GET['do'] == 'dripimport')) {
 					`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
 					`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
 					`owner` = '".mysqli_real_escape_string($db['link'], $data['aansturing'])."'";
-					if ((!empty($data['standaardtekst'])) || (!empty($data['bewegwijzering']))) {
+					if (!empty($data['standaardtekst'])) {
 						$qry .= ", `defaulttext` = '1'";
+					}
+					else {
+						$qry .= ", `defaulttext` = '0'";
 					}
 					if ($changed == FALSE) {
 						$qry .= " WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."'";
