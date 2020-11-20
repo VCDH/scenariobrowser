@@ -1,4 +1,5 @@
 dbconnect.inc.php
 mail.cfg.php
+apikey.cfg.php
 store/
 attachments/

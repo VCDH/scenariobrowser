@@ -305,7 +305,8 @@ elseif ($_GET['do'] == 'splitstep2') {
 <head>
 <meta charset="UTF-8">
 <title>Scenariobrowser - Routedeel <?php if (is_numeric($data['id'])) echo 'Bewerken'; else echo 'Toevoegen'; ?></title>
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=&amp;sensor=false"></script>
+<?php include ('apikey.cfg.php'); ?>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=<?php echo $cfg_googlemapsapikey; ?>&amp;sensor=false"></script>
 <script type="text/javascript" src="markerwithlabel_packed.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>

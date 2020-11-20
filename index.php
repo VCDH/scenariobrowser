@@ -27,7 +27,8 @@ include_once('logincheck.inc.php');
 <title>Scenariobrowser - kaart</title>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key="></script>
+<?php include ('apikey.cfg.php'); ?>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=<?php echo $cfg_googlemapsapikey; ?>"></script>
 <script type="text/javascript" src="markerwithlabel_packed.js"></script>
 <script type="text/javascript" src="map.js"></script>
 <script type="text/javascript" src="search.js"></script>

@@ -766,7 +766,8 @@ elseif ($_GET['do'] == 'download') {
 <head>
 <meta charset="UTF-8">
 <title>Scenariobrowser - Scenario</title>
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=&amp;sensor=false"></script>
+<?php include ('apikey.cfg.php'); ?>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=<?php echo $cfg_googlemapsapikey; ?>&amp;sensor=false"></script>
 <script type="text/javascript" src="markerwithlabel_packed.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -1357,14 +1358,14 @@ else {
 						if (mysqli_num_rows($res3)) {
 							echo '<ul class="drips">';
 							while ($row3 = mysqli_fetch_row($res3)) {
-								switch ($row3[3]) {
-									case 'gemeente Den Haag':
+								switch (strtolower($row3[3])) {
+									case 'gemeente den haag':
 										$driplabelstyle = 'GDH'; break;
-									case 'provincie Zuid-Holland':
+									case 'provincie zuid-holland':
 										$driplabelstyle = 'PZH'; break;
-									case 'gemeente Rotterdam':
+									case 'gemeente rotterdam':
 										$driplabelstyle = 'GRD'; break;
-									case 'Rijkswaterstaat ZWN':
+									case 'rijkswaterstaat zwb':
 										$driplabelstyle = 'RWS'; break;
 									default: 
 										$driplabelstyle = 'other'; break;
