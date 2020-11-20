@@ -27,7 +27,7 @@ if (!logincheck()) {
 //include database gegevens
 include('dbconnect.inc.php');
 
-$drip_url = 'http://assets.vcdh.nl/opendata.php';
+$drip_url = 'http://assets.vcdh.nl/tabel.php?download=json';
 
 //verwerk gebruikerswijziging
 if (($_GET['do'] == 'useredit') && (!empty($_POST))) {
@@ -119,69 +119,81 @@ elseif (permissioncheck('dripdb_bijwerken') && ($_GET['do'] == 'dripimport')) {
 		mysqli_query($db['link'], $qry);
 		
 		foreach ($json as $data) {
-			//controleer of bestaat, zo niet voeg toe
-			$qry = "SELECT * FROM `".$db['prefix']."drips`
-			WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['iid'])."'";
-			$res = mysqli_query($db['link'], $qry);
-			if (!mysqli_num_rows($res)) {
-				$qry = "INSERT INTO `".$db['prefix']."drips` SET
-				`id` = '".mysqli_real_escape_string($db['link'], $data['iid'])."',
-				`latitude` = '".mysqli_real_escape_string($db['link'], $data['lat'])."',
-				`longitude` = '".mysqli_real_escape_string($db['link'], $data['lng'])."',
-				`rotation` = '".mysqli_real_escape_string($db['link'], $data['rot'])."',
-				`name` = '".mysqli_real_escape_string($db['link'], $data['id'])."',
-				`comment` = '".mysqli_real_escape_string($db['link'], $data['opm'])."',
-				`road` = '".mysqli_real_escape_string($db['link'], $data['weg'])."',
-				`direction` = '".mysqli_real_escape_string($db['link'], $data['ri'])."',
-				`position` = '".mysqli_real_escape_string($db['link'], $data['km'])."',
-				`code` = '".mysqli_real_escape_string($db['link'], $data['code'])."',
-				`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
-				`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
-				`owner` = '".mysqli_real_escape_string($db['link'], $data['aanst'])."'";
-				if ((!empty($data['stdtxt'])) || (!empty($data['stdafb']))) {
-					$qry .= ", `defaulttext` = '1'";
-				}
-				mysqli_query($db['link'], $qry);
-			}
-			else {
-				//controleer wijzigingen
-				$oldvalues = mysqli_fetch_assoc($res);
-				$changed = FALSE;
-				if ($oldvalues['name'] != $data['id']) $changed = TRUE;
-				if ($oldvalues['status'] != $data['status']) $changed = TRUE;
-				if ($oldvalues['aanst'] != $data['owner']) $changed = TRUE;
-				if ($oldvalues['type'] != $data['type']) $changed = TRUE;
-				if (abs($oldvalues['latitude'] - $data['lat']) > 0.01) $changed = TRUE;
-				if (abs($oldvalues['longitude'] - $data['lng']) > 0.006) $changed = TRUE;
-				if (abs($oldvalues['rotation'] - $data['rot']) > 15) $changed = TRUE;
-				//wanneer naam, status, owner gewijzigd of lat, lng, rot meer dan zoveel gewijzigd, sla op in tijdelijke database om te vragen in wizard
-				//anders werk bij in reguliere database
-				if ($changed == FALSE) {
-					$qry = "UPDATE `".$db['prefix']."drips` SET ";
+			//check of het een DRIP is
+			if ($data['assettypename'] == 'DRIP') {
+				//controleer of bestaat, zo niet voeg toe
+				$qry = "SELECT * FROM `".$db['prefix']."drips`
+				WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."'";
+				$res = mysqli_query($db['link'], $qry);
+				if (!mysqli_num_rows($res)) {
+					$qry = "INSERT INTO `".$db['prefix']."drips` SET
+					`id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."',
+					`latitude` = '".mysqli_real_escape_string($db['link'], $data['latitude'])."',
+					`longitude` = '".mysqli_real_escape_string($db['link'], $data['longitude'])."',
+					`rotation` = '".mysqli_real_escape_string($db['link'], $data['heading'])."',
+					`name` = '".mysqli_real_escape_string($db['link'], $data['code'])."',
+					`comment` = '".mysqli_real_escape_string($db['link'], $data['memo'])."',
+					`road` = '".mysqli_real_escape_string($db['link'], $data['weg'])."',
+					`direction` = '".mysqli_real_escape_string($db['link'], $data['richting'])."',
+					`position` = '".mysqli_real_escape_string($db['link'], $data['hectometer'])."',
+					`code` = '".mysqli_real_escape_string($db['link'], $data['naam'])."',
+					`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
+					`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
+					`owner` = '".mysqli_real_escape_string($db['link'], $data['aansturing'])."'";
+					if ((!empty($data['standaardtekst'])) || (!empty($data['bewegwijzering']))) {
+						$qry .= ", `defaulttext` = '1'";
+					}
+					mysqli_query($db['link'], $qry);
 				}
 				else {
-					$qry = "INSERT INTO `".$db['prefix']."dripstemp` SET
-					`id` = '".mysqli_real_escape_string($db['link'], $data['iid'])."', ";
+					//controleer wijzigingen
+					$oldvalues = mysqli_fetch_assoc($res);
+					$changed = FALSE;
+					//check of DRIP wordt gebruikt, zo niet dan gewoon bijwerken
+					$qry = "SELECT * FROM `".$db['prefix']."schakelingdrips`
+					WHERE `drip_id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."'";
+					$res = mysqli_query($db['link'], $qry);
+					if (mysqli_num_rows($res)) {
+						//drip in gebruik
+						//controleer of belangrijke velden gewijzigd zijn.
+						if ($oldvalues['name'] != $data['code']) $changed = TRUE;
+						if ($oldvalues['status'] != $data['status']) $changed = TRUE;
+						if ($oldvalues['owner'] != $data['aansturing']) $changed = TRUE;
+						if ($oldvalues['type'] != $data['type']) $changed = TRUE;
+						if (abs($oldvalues['latitude'] - $data['latitude']) > 0.01) $changed = TRUE;
+						if (abs($oldvalues['longitude'] - $data['longitude']) > 0.006) $changed = TRUE;
+						if (abs($oldvalues['rotation'] - $data['heading']) > 15) $changed = TRUE;
+					}
+
+					//wanneer naam, status, owner gewijzigd of lat, lng, rot meer dan zoveel gewijzigd, sla op in tijdelijke database om te vragen in wizard
+					//anders werk bij in reguliere database
+					if ($changed == FALSE) {
+						$qry = "UPDATE `".$db['prefix']."drips` SET ";
+					}
+					else {
+						$qry = "INSERT INTO `".$db['prefix']."dripstemp` SET
+						`id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."', ";
+					}
+					$qry .= "`latitude` = '".mysqli_real_escape_string($db['link'], $data['latitude'])."',
+					`longitude` = '".mysqli_real_escape_string($db['link'], $data['longitude'])."',
+					`rotation` = '".mysqli_real_escape_string($db['link'], $data['heading'])."',
+					`name` = '".mysqli_real_escape_string($db['link'], $data['code'])."',
+					`comment` = '".mysqli_real_escape_string($db['link'], $data['memo'])."',
+					`road` = '".mysqli_real_escape_string($db['link'], $data['weg'])."',
+					`direction` = '".mysqli_real_escape_string($db['link'], $data['richting'])."',
+					`position` = '".mysqli_real_escape_string($db['link'], $data['hectometer'])."',
+					`code` = '".mysqli_real_escape_string($db['link'], $data['naam'])."',
+					`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
+					`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
+					`owner` = '".mysqli_real_escape_string($db['link'], $data['aansturing'])."'";
+					if ((!empty($data['standaardtekst'])) || (!empty($data['bewegwijzering']))) {
+						$qry .= ", `defaulttext` = '1'";
+					}
+					if ($changed == FALSE) {
+						$qry .= " WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."'";
+					}
+					mysqli_query($db['link'], $qry);
 				}
-				$qry .= "`latitude` = '".mysqli_real_escape_string($db['link'], $data['lat'])."',
-				`longitude` = '".mysqli_real_escape_string($db['link'], $data['lng'])."',
-				`rotation` = '".mysqli_real_escape_string($db['link'], $data['rot'])."',
-				`name` = '".mysqli_real_escape_string($db['link'], $data['id'])."',
-				`comment` = '".mysqli_real_escape_string($db['link'], $data['opm'])."',
-				`road` = '".mysqli_real_escape_string($db['link'], $data['weg'])."',
-				`direction` = '".mysqli_real_escape_string($db['link'], $data['ri'])."',
-				`position` = '".mysqli_real_escape_string($db['link'], $data['km'])."',
-				`code` = '".mysqli_real_escape_string($db['link'], $data['code'])."',
-				`type` = '".mysqli_real_escape_string($db['link'], $data['type'])."',
-				`status` = '".mysqli_real_escape_string($db['link'], $data['status'])."',
-				`owner` = '".mysqli_real_escape_string($db['link'], $data['aanst'])."'";
-				if ((!empty($data['stdtxt'])) || (!empty($data['stdafb']))) {
-					$qry .= ", `defaulttext` = '1'";
-				}
-				if ($changed == FALSE) {
-					$qry .= " WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['iid'])."'";
-				}
-				mysqli_query($db['link'], $qry);
 			}
 		}
 	}

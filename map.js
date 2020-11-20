@@ -271,19 +271,19 @@ $( document ).ready(function() {
 				$.each( json, function(i, value) {
 					value.id = parseInt(value.id);
 					//opacity
-					if (value.status != 'bestaand') {
+					if (value.status.toLowerCase() != 'bestaand') {
 						var opacity = 0.3;
 					}
 					else {
 						var opacity = 1;
 					}
 					//colours
-					switch (value.owner) {
-						case 'gemeente Den Haag' : strokecolour = '#155429'; fillcolour = '#fff'; break;
-						case 'Rijkswaterstaat ZWN' : strokecolour = '#000'; fillcolour = '#c9f'; break;
-						case 'provincie Zuid-Holland' : strokecolour = '#000'; fillcolour = '#c00'; break;
-						case 'gemeente Rotterdam' : strokecolour = '#000'; fillcolour = '#9AC61E'; break;
-						case 'Z\'meer' : strokecolour = '#0072b9'; fillcolour = '#ffe00f'; break;
+					switch (value.owner.toLowerCase()) {
+						case 'gemeente den haag' : strokecolour = '#155429'; fillcolour = '#fff'; break;
+						case 'rijkswaterstaat zwn' : strokecolour = '#000'; fillcolour = '#c9f'; break;
+						case 'provincie zuid-holland' : strokecolour = '#000'; fillcolour = '#c00'; break;
+						case 'gemeente rotterdam' : strokecolour = '#000'; fillcolour = '#9AC61E'; break;
+						case 'z\'meer' : strokecolour = '#0072b9'; fillcolour = '#ffe00f'; break;
 						default : strokecolour = '#000'; fillcolour = '#666'; 
 					}
 					//icon variations

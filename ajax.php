@@ -341,7 +341,7 @@ if ($_GET['type'] == 'mapobjects') {
 			else $data['rotation'] = (int) $data['rotation'];
 			$data['name'] = htmlspecialchars($data['name']);
 			//set opacity from status
-			if ($data['status'] != 'Bestaand') {
+			if (strtolower($data['status']) != 'bestaand') {
 				$data['opacity'] = 0.3;
 			}
 			else {
@@ -349,12 +349,12 @@ if ($_GET['type'] == 'mapobjects') {
 			}
 			unset($data['status']);
 			//set line and fill colors
-			switch($data['owner']) {
-				case 'gemeente Den Haag' : $data['strokecolour'] = '#155429'; $data['fillcolour'] = '#fff'; break;
-				case 'Rijkswaterstaat ZWN' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#c9f'; break;
-				case 'provincie Zuid-Holland' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#c00'; break;
-				case 'gemeente Rotterdam' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#9AC61E'; break;
-				case 'Z\'meer' : $data['strokecolour'] = '#0072b9'; $data['fillcolour'] = '#ffe00f'; break;
+			switch(strtolower($data['owner'])) {
+				case 'gemeente den haag' : $data['strokecolour'] = '#155429'; $data['fillcolour'] = '#fff'; break;
+				case 'rijkswaterstaat zwn' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#c9f'; break;
+				case 'provincie zuid-holland' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#c00'; break;
+				case 'gemeente rotterdam' : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#9AC61E'; break;
+				case 'z\'meer' : $data['strokecolour'] = '#0072b9'; $data['fillcolour'] = '#ffe00f'; break;
 				default : $data['strokecolour'] = '#000'; $data['fillcolour'] = '#666'; 
 			}
 			unset($data['owner']);

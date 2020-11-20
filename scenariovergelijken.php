@@ -318,14 +318,14 @@ if ($scenario_data['id'] > 0) {
 				foreach ($scenarioversies as $scenarioversie) {
 					echo '<td style="width:50%; vertical-align:top;">';
 					if (!empty($drip[$scenarioversie])) {
-						switch ($drip[$scenarioversie][3]) {
-							case 'gemeente Den Haag':
+						switch (strtolower($drip[$scenarioversie][3])) {
+							case 'gemeente den haag':
 								$driplabelstyle = 'GDH'; break;
-							case 'provincie Zuid-Holland':
+							case 'provincie zuid-holland':
 								$driplabelstyle = 'PZH'; break;
-							case 'gemeente Rotterdam':
+							case 'gemeente rotterdam':
 								$driplabelstyle = 'GRD'; break;
-							case 'Rijkswaterstaat ZWN':
+							case 'rijkswaterstaat zwn':
 								$driplabelstyle = 'RWS'; break;
 							default: 
 								$driplabelstyle = 'other'; break;
