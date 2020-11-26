@@ -256,7 +256,7 @@ if ($_GET['type'] == 'dripinfo') {
 		if (!empty($data['position'])) {
 			echo '<tr><td>km:</td><td>'.htmlspecialchars($data['position']).'</td></tr>';
 		}
-		echo '<tr><td>type:</td><td>'.htmlspecialchars($data['type']).'</td></tr><tr><td>status:</td><td>'.htmlspecialchars($data['status']).'</td></tr><tr><td>aansturing:</td><td>'.htmlspecialchars($data['owner']).'</td></tr>';
+		echo '<tr><td>template/type:</td><td>'.htmlspecialchars($data['type']).'</td></tr><tr><td>status:</td><td>'.htmlspecialchars($data['status']).'</td></tr><tr><td>aansturing:</td><td>'.htmlspecialchars($data['owner']).'</td></tr>';
 		echo '</table>';
 		echo '<p><a href="drip.php?do=scenariobyvms&amp;id='.$data['id'].'">Zoek scenario\'s bij DRIP</a></p>';
 	}

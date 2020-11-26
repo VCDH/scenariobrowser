@@ -121,6 +121,10 @@ elseif (permissioncheck('dripdb_bijwerken') && ($_GET['do'] == 'dripimport')) {
 		foreach ($json as $data) {
 			//check of het een DRIP is
 			if ($data['assettypename'] == 'DRIP') {
+				//gebruik template in plaats van type, als template beschikbaar
+				if (!empty($data['template'])) {
+					$data['type'] = $data['template'];
+				}
 				//controleer of bestaat, zo niet voeg toe
 				$qry = "SELECT * FROM `".$db['prefix']."drips`
 				WHERE `id` = '".mysqli_real_escape_string($db['link'], $data['assetid'])."'";
