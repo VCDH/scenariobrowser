@@ -894,7 +894,7 @@ elseif ($_GET['do'] == 'description') {
     <h1>Omschrijving bewerken voor scenario <em><?php echo htmlspecialchars($data['naam']); ?></em></h1>
     <form method="post">
     
-    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script type="text/javascript" src="tinymce/tinymce.min.js"></script>
 	<script type="text/javascript" src="tinymce_config.js"></script>
     <fieldset>
     <legend>Omschrijving</legend>

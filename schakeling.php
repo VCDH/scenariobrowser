@@ -311,7 +311,7 @@ if ($_GET['do'] == 'edit') {
     
     <script src="jQuery-File-Upload-9.12.3/js/jquery.iframe-transport.js"></script>
     <script src="jQuery-File-Upload-9.12.3/js/jquery.fileupload.js"></script>
-    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script type="text/javascript" src="tinymce/tinymce.min.js"></script>
 	<script type="text/javascript" src="tinymce_config.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
     <script type="text/javascript" src="schakeling.js"></script>
