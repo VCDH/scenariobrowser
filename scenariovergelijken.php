@@ -19,11 +19,7 @@
 */
 session_start();
 include_once('logincheck.inc.php');
-//redirect if not logged in
-if (!logincheck()) {
-	header('Location:http://'.$_SERVER["SERVER_NAME"].substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/')).'/index.php');
-    exit;
-}
+
 //include database gegevens
 include('dbconnect.inc.php');
 
