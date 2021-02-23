@@ -258,7 +258,11 @@ if ($scenario_data['id'] > 0) {
 		$schakelingen = array();
 		while ($row2 = mysqli_fetch_assoc($res)) {
 			if ($precies1schakelingperversie == TRUE) {
-				$row2['naam'] = '';
+				$row2['id'] = '';
+			}
+			while (array_key_exists($row2['scenarioversie'], $schakelingen[$row2['naam']])) {
+				//als er meer schakelingen met dezelfde naam zijn, voorkom dat deze overschreven worden
+				$row2['naam'] .= '_2';
 			}
 			$schakelingen[$row2['naam']][$row2['scenarioversie']] = $row2;
 		}
