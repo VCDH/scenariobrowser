@@ -128,13 +128,16 @@ if ($_GET['type'] == 'infowindow') {
 			echo '</ul>';
 			echo '</td></tr>';
 		}
-		echo '<table>';
+		echo '</table>';
 		if (permissioncheck('wegvak_bewerken')) {
 			echo '<p><a href="wegvak.php?do=edit&amp;id='.$data['id'].'"><span class="ui-icon ui-icon-pencil"></span> routedeel bewerken</a> | <a href="wegvak.php?do=split&amp;id='.$data['id'].'"><span class="ui-icon ui-icon-scissors"></span> routedeel splitsen</a></p>';
 		}
+		echo '<p>';
 		if (permissioncheck('scenario_bewerken')) {
-			echo '<p><a href="scenario.php?wegvak_id='.$data['id'].'&amp;do=edit"><span class="ui-icon ui-icon-document"></span> nieuw scenario</a></p>';
+			echo '<a href="scenario.php?wegvak_id='.$data['id'].'&amp;do=edit"><span class="ui-icon ui-icon-document"></span> nieuw scenario</a> | ';
 		}
+		echo '<a href="scenariowegvak.php?wegvakken='.$data['id'].'"><span class="ui-icon ui-icon-search"></span> alle scenario\'s met dit wegvak</a>';
+		echo '</p>';
 	}
 	else {
 		echo 'Kan wegvak niet vinden in database.';	
