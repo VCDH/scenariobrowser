@@ -104,10 +104,9 @@ if (!empty($wegvakken_validated)) {
 	$qry = "SELECT distinct `".$db['prefix']."schakelingen`.`scenario_id` FROM `".$db['prefix']."omleidingmapping`
 	LEFT JOIN `".$db['prefix']."schakelingen`
 	ON `".$db['prefix']."omleidingmapping`.`schakeling_id` = `".$db['prefix']."schakelingen`.`id`
-	LEFT JOIN `".$db['prefix']."scenarioversies`
-	ON `".$db['prefix']."scenarioversies`.`scenario_id` = `".$db['prefix']."schakelingen`.`scenario_id`
-	WHERE `wegvak_id` IN (" . join(',', $wegvakken_validated) . ")
-	AND `concept` = 0";
+	LEFT JOIN (SELECT * FROM `".$db['prefix']."scenarioversies` WHERE `concept` = 0) AS `scnver`
+	ON `scnver`.`scenario_id` = `".$db['prefix']."schakelingen`.`scenario_id`
+	WHERE `wegvak_id` IN (" . join(',', $wegvakken_validated) . ")";
 	$res = mysqli_query($db['link'], $qry);
 	if (mysqli_num_rows($res)) {
 		while ($row = mysqli_fetch_row($res)) {
