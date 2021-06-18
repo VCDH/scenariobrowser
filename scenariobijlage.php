@@ -228,7 +228,7 @@ if ($_GET['do'] == 'upload') {
 		$filetype = strtolower(substr($name, strrpos($name, '.')));
 		if ($error == UPLOAD_ERR_OK) {
 			//check filesize
-			if ($size >= 10000*1024) {
+			if ($size >= 25000*1024) {
 				$files['files'][] = array('name' => $name, 'size' => $size, 'error' => 'Bestand is te groot, maximumgrootte 10 MB.');
 			}
 			//check filetype
