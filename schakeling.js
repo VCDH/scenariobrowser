@@ -311,9 +311,19 @@ function open_wdd(drip_name, return_url, md5) {
 		position: { my: "center", at: "center", of: window }
 	});
 	$("#dialog").parent().css({position : "fixed"}).end().dialog('open');
-	$('#dialog').html('<iframe src="http://wdd.s200.nl/?return_url=' + encodeURIComponent(return_url) + (md5 != null ? '&amp;md5=' + md5 : '') + '" height="100%" width="100%" style="border:none;"></iframe>');
+	$('#dialog').html('<iframe name="wdd" src="http://wdd.s200.nl/?return_url=' + encodeURIComponent(return_url) + (md5 != null ? '&amp;md5=' + md5 : '') + '" height="100%" width="100%" style="border:none;"></iframe>');
 }
-function close_wdd() {
+function close_wdd(url = null) {
+	if (url !== null) {
+		//get image from server
+		$.get(url) //TODO: this should rather be a json reply
+		.done (function(html) {
+			console.log(html);
+			if (html !== ' OK') {
+				alert(html);
+			}
+		});
+	}
 	$('#dialog').dialog('close');
 	load_drips();
 }

@@ -17,134 +17,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-session_start();
 
-include_once('logincheck.inc.php');
-//redirect if not logged in
-if (!logincheck() || !($_SESSION['accesslevel'] >= $auth['scenario_bewerken'])) {
-	echo '<p>Onvoldoende rechten om handeling uit te voeren.</p>';
-    exit;
-}
-//check if files
-if (!preg_match('/([0-9A-Z]){32}/i', $_GET['image'])) {
-	echo '<p>Ongeldige aanvraag</p>';
-    exit;
-}
-$md5 = $_GET['image'];
+//fix cross-site cookie issue
 
-//haal afbeelding op
-$source_file = 'http://wdd.s200.nl/store/'.substr($md5, 0, 1).'/'.$md5.'.png';
-if (!$image = file_get_contents($source_file)) {
-	var_dump($image);
-	echo '<p>Geen afbeelding beschikbaar: ';
-	echo $source_file.'</p>';
-	exit;
-}
+$url = 'http://'.$_SERVER['HTTP_HOST'].rtrim(dirname($_SERVER['PHP_SELF']), '/\\').'/wddhandler2.php?do=' . htmlspecialchars($_GET['do']) . '&id=' . htmlspecialchars($_GET['id']) . '&drip_id=' . htmlspecialchars($_GET['drip_id']) . '&ow=' . htmlspecialchars($_GET['ow']) . '&image=' . htmlspecialchars($_GET['image']);
 
-//include database gegevens
-include('dbconnect.inc.php');
-
-if ($_GET['do'] == 'new') {
-	//controleer of er een schakeling is met het gegeven id
-	$qry = "SELECT `id` FROM `".$db['prefix']."schakelingen` 
-	WHERE `id` = '".mysqli_real_escape_string($db['link'], $_GET['id'])."'";
-	$res = mysqli_query($db['link'], $qry);
-	if (mysqli_num_rows($res)) {
-		$data = mysqli_fetch_row($res);
-		$schakeling_id = $data[0];
-	}
-	else {
-		echo '<p>Kan aanvraag niet verwerken: geen schakeling met opgegeven ID.</p>';
-		exit;
-	}
-	//controleer of er een drip is met het gegeven id
-	$qry = "SELECT `id` FROM `".$db['prefix']."drips` 
-	WHERE `id` = '".mysqli_real_escape_string($db['link'], $_GET['drip_id'])."'";
-	$res = mysqli_query($db['link'], $qry);
-	if (mysqli_num_rows($res)) {
-		$data = mysqli_fetch_row($res);
-		$drip_id = $data[0];
-	}
-	else {
-		echo '<p>Kan aanvraag niet verwerken: geen DRIP met opgegeven ID.</p>';
-		exit;
-	}
-	
-	//sla afbeelding op
-	$target_file = 'store/'.strtoupper(substr($md5, 0, 1)).'/'.$md5.'.png';
-	if (!file_exists($target_file)) {
-		file_put_contents($target_file, $image);
-	}
-	//sla op in database
-	$overwrite = TRUE;
-	if ($_GET['ow'] == 'true') {
-		//overschrijven actief
-		$qry = "SELECT `id`, `afbeelding` FROM `".$db['prefix']."schakelingdrips` 
-		WHERE `schakeling_id` = '".$schakeling_id."'
-		AND `drip_id` = '".$drip_id."'
-		LIMIT 1";
-		$res = mysqli_query($db['link'], $qry);
-		if (mysqli_num_rows($res)) {
-			$row = mysqli_fetch_row($res);
-			//overschrijf
-			$qry = "UPDATE `".$db['prefix']."schakelingdrips` 
-			SET 
-			`afbeelding` = '".$md5.'.png'."'
-			WHERE `id` = '".$row[0]."'";
-			mysqli_query($db['link'], $qry);
-			//verwijder in onbruik geraakte afbeeldingen
-			include_once('afbeeldingverwijderen.fct.php');
-			afbeelding_verwijderen($row[1]);
-		}
-		else {
-			$overwrite = FALSE;
-		}
-	}
-	else {
-		$overwrite = FALSE;
-	}
-	//insert new
-	if ($overwrite == FALSE) {
-		$qry = "INSERT INTO `".$db['prefix']."schakelingdrips` 
-			SET 
-			`schakeling_id` = '".$schakeling_id."',
-			`drip_id` = '".$drip_id."',
-			`afbeelding` = '".$md5.'.png'."'";
-			mysqli_query($db['link'], $qry);
-	}
-	echo 'OK';
-}
-elseif ($_GET['do'] == 'edit') {
-	//controleer of er een schakelingdrip is met het gegeven id
-	$qry = "SELECT `id`, `afbeelding` FROM `".$db['prefix']."schakelingdrips` 
-	WHERE `id` = '".mysqli_real_escape_string($db['link'], $_GET['id'])."'";
-	$res = mysqli_query($db['link'], $qry);
-	if (mysqli_num_rows($res)) {
-		$row = mysqli_fetch_row($res);
-		$id = $row[0];
-	}
-	else {
-		echo '<p>Kan aanvraag niet verwerken: geen DRIP met opgegeven ID.</p>';
-		exit;
-	}
-	
-	//sla afbeelding op
-	$target_file = 'store/'.strtoupper(substr($md5, 0, 1)).'/'.$md5.'.png';
-	if (!file_exists($target_file)) {
-		file_put_contents($target_file, $image);
-	}
-	//sla op in database
-	$qry = "UPDATE `".$db['prefix']."schakelingdrips` 
-	SET 
-	`afbeelding` = '".$md5.'.png'."'
-	WHERE `id` = '".$id."'";
-	mysqli_query($db['link'], $qry);
-	//verwijder in onbruik geraakte afbeeldingen
-	include_once('afbeeldingverwijderen.fct.php');
-	afbeelding_verwijderen($row[1]);
-	echo 'OK';
-}
 ?>
 <script type="text/javascript">
-parent.close_wdd();
+parent.close_wdd(<?php echo '\'' . $url . '\'' ?>);
 </script>
+<?php
+exit;
+?>
